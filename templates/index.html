@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Placement ChatBot</title>
+  <meta charset="UTF-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon"
+    href="https://static.vecteezy.com/system/resources/previews/010/927/083/original/chatbot-icon-on-white-background-online-support-service-bot-sign-chat-bot-sign-for-support-service-concept-flat-style-vector.jpg"
+    type="image/jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <div class="chat-icon" id="chat-icon" onclick="toggleChat()">
+    <div class="chat-content" id="chat-content">
+        <p>Hey, it's Ana! Want some assistance navigating the world of placements? </p>
+          <img id="chat-img" src="https://i.pinimg.com/564x/3a/87/9f/3a879f07d46ec94c28e7ca9e6f111790.jpg" alt="Chat Icon">
+    </div>
+</div>
+  <div class="msger-popup" id="msger-popup">
+    <section class="msger">
+      <header class="msger-header">
+        <div class="msger-header-title">
+          <i class="fas fa-graduation-cap"></i> Placement ChatBot  <i class="fas fa-graduation-cap"></i>
+        </div>
+        <button class="close-btn" onclick="toggleChat()">X</button>
+      </header>
+
+      <main class="msger-chat">
+        <div class="msg left-msg">
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">Ana</div>
+              <div class="msg-info-time"></div>
+            </div>
+
+            <div class="msg-text">
+              Hey,I'm Ana.<br>
+              Let's navigate the maze of placements together! How can I help you? 😊<br> Type menu to select
+              options<br><br>
+              <strong>Select an option:</strong>
+              <br>
+              <!-- <button onclick="selectOption(1)">1. Previous Placement Related Queries</button><br> -->
+              <button onclick="selectOption(1)">1. Placement Preparation</button><br>
+              <button onclick="selectOption(2)">2. Resume Parser</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <form class="msger-inputarea" method="post" enctype="multipart/form-data">
+        <input type="text" class="msger-input" name="textInput" id="textInput" placeholder="Enter your message..."
+          required>
+        <input type="file" name="fileInput" id="fileInput" style="display: none;" accept=".pdf">
+        <button type="submit" class="msger-send-btn"><i class="fas fa-paper-plane fa-2x"></i></button>
+
+      </form>
+    </section>
+  </div>
+  <!-- partial -->
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+  <script>
+
+    const msgerForm = get(".msger-inputarea");
+    const msgerInput = get(".msger-input");
+    const msgerChat = get(".msger-chat");
+
+    let selectedOption = null;
+    let check = null;
+
+    // Icons made by Freepik from www.flaticon.com
+    const BOT_IMG = "http://images6.fanpop.com/image/photos/37300000/Transparent-Anna-frozen-37341554-500-744.png";
+    const PERSON_IMG = "https://wallpapers.com/images/hd/cool-anime-boy-pfp-hotaro-oreki-ejrnayvw61coeizn.jpg";
+    const BOT_NAME = "Ana";
+    const PERSON_NAME = "You";
+
+    function selectOption(option) {
+      selectedOption = option;
+      appendMessage(PERSON_NAME, PERSON_IMG, "right", "Selected option: " + option);
+      if (selectedOption === 1) {
+        msgerInput.placeholder = "Enter message";
+        fileInput.style.display = "none";
+        appendMessage(BOT_NAME, BOT_IMG, "left", "I'm here to support you with your placement preparation. I can provide you with previous year placement statistics, answer queries like, the number of students placed in various companies and the list of companies that have visited our college and so on. Additionally, I can assist you in preparing for placements to get the dream job you desire.");
+      }
+      if (selectedOption === 2) {
+        msgerInput.placeholder = "Enter JD or Job Role";
+        fileInput.style.display = "block";
+        fileInput.setAttribute("required", "required");
+        appendMessage(BOT_NAME, BOT_IMG, "left", "Please share the job description or job role along with your resume in <strong>PDF format</strong> for a personalized assessment of your fit for the role.");
+        // Make file input required
+      } else {
+        fileInput.removeAttribute("required"); // Remove required attribute if option is not 3
+      }
+    }
+
+    msgerForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const msgText = msgerInput.value;
+      if (msgText === "1") {
+        selectedOption === 1
+      }
+      const file = document.getElementById("fileInput").files[0];
+      if (!msgText) return;
+
+      if (selectedOption === null) {
+        appendMessage(BOT_NAME, BOT_IMG, "left", "<strong>Please select an option first.</strong>");
+        msgerInput.value = "";
+        return;
+      }
+
+      appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+      msgerInput.value = "";
+
+      // Send request based on selected option
+      if (selectedOption === 1) {
+        botResponse(msgText, "decision_making", check = 1);
+        //   } else if (selectedOption === 3) {
+        //     botResponse(msgText, "response_qa",check=2);
+      } else if (selectedOption === 2) {
+        botResponse(msgText, "response_resume", check = 2)
+      }
+    });
+
+    function appendMessage(name, img, side, text) {
+      //   Simple solution for small apps
+      const msgHTML = `
+  <div class="msg ${side}-msg">
+    <div class="msg-bubble">
+      <div class="msg-info">
+        <div class="msg-info-name">${name}</div>
+        <div class="msg-info-time">${formatDate(new Date())}</div>
+      </div>
+      <div class="msg-text">${text}</div>
+    </div>
+  </div>
+`;
+      msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+      msgerChat.scrollTop += 500;
+    }
+
+
+    function appendTypingIndicator(name, side, text) {
+      const typingIndicatorHTML = `
+    <div class="msg ${side}-msg">
+      <div class="msg-bubble">
+        <div class="msg-info">
+        <div class="msg-info-name">${name}</div>
+        </div>
+        <div class="msg-text">
+          <div class="typing-indicator">
+            ${text}
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      msgerChat.insertAdjacentHTML("beforeend", typingIndicatorHTML);
+      msgerChat.scrollTop += 600;
+    }
+
+
+    function botResponse(rawText, endpoint, check) {
+      if (rawText.toLowerCase() === "menu") {
+        // Reset selectedOption to null
+        selectedOption = null;
+        msgerInput.placeholder = "Enter message";
+        fileInput.style.display = "none";
+        // Show the initial message with options
+        appendMessage(BOT_NAME, BOT_IMG, "left", "<strong>Select an option:<strong><br><button onclick=\"selectOption(1)\">1. Placement Preparation</button><br><button onclick=\"selectOption(2)\">2. Resume Parser</button>");
+        return;
+      }
+
+      if (rawText.toLowerCase() === "bye") {
+        // Reset selectedOption to null
+        selectedOption = null;
+        msgerInput.placeholder = "Enter a message";
+        fileInput.style.display = "none";
+        // Show the initial message with options
+        appendMessage(BOT_NAME, BOT_IMG, "left", "Goodbye! Feel free to return anytime if you have more questions. Have a great day! 😊");
+        return;
+      }
+      appendTypingIndicator(BOT_NAME, "left", "Typing");
+
+      if (check === 1) {
+        $.get("/decision_making", { msg: rawText }).done(function (data) {
+          const decision = data;
+          console.log(decision)
+          if (decision === "response_db") {
+            $.get("/response_db", { msg: rawText }).done(function (data) {
+              console.log(rawText);
+              console.log(data);
+              const msgText = data;
+              removeTypingIndicator();
+              appendMessage(BOT_NAME, BOT_IMG, "left", formatText(msgText) + "<br><br><strong> Type Menu to select other option");
+            }).fail(function (xhr, status, error) {
+              // Handle internal server error
+              removeTypingIndicator();
+              appendMessage(BOT_NAME, BOT_IMG, "left", "Sorry, Unable to fetch information please try again." + "<br><br> <strong>Type menu to select other option");
+            });
+
+          }
+
+          if (decision == "response_qa") {
+            $.get("/response_qa", { msg: rawText }).done(function (data) {
+              console.log(rawText);
+              console.log(data);
+
+              // Split the response into individual lines
+              const lines = data.split('\n').filter(line => line.trim() !== "");
+
+              // Format each line with appropriate HTML tags
+              const formattedResponse = lines.map(line => {
+                // Remove star marks
+                line = line.replace(/\*/g, '');
+                // Separate the title and content using the colon ':' character
+                const parts = line.split(':');
+                // Ensure there are two parts (title and content)
+                if (parts.length === 2) {
+                  const title = parts[0].trim();
+                  const content = parts[1].trim();
+                  // Wrap title and content in paragraphs
+                  return `<p><strong>${title}</strong>: ${content}</p>`;
+                } else {
+                  // If the line does not contain a colon, wrap it in a paragraph
+                  return `<p>${line.trim()}</p>`;
+                }
+              }).join('');
+
+              // Append the formatted response to the chat
+              removeTypingIndicator();
+              appendMessage(BOT_NAME, BOT_IMG, "left", formattedResponse + "<br><br><strong> Type Menu to select other option");
+            }).fail(function (xhr, status, error) {
+              // Handle internal server error
+              removeTypingIndicator();
+              appendMessage(BOT_NAME, BOT_IMG, "left", "Sorry, Unable to fetch information please try again." + "<br><br><strong>Type Menu to select other option");
+            });;
+          }
+        })
+      }
+      if (check === 2) {
+        const file = document.getElementById("fileInput").files[0];
+        const formData = new FormData();
+        formData.append('msg', rawText);
+        if (file) {
+          formData.append('file', file);
+        }
+        $.ajax({
+          url: "/" + endpoint,
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            // Split the data into lines
+            console.log(data)
+            const response = data.response;
+            const role = data.role;
+            const lines = response.split('\n').filter(line => line.trim() !== "");
+            const lines_role = role.split('\n').filter(line => line.trim() !== "");
+
+            // Get the first line after "Response:" if it exists
+
+            // Filter out lines containing unnecessary information
+            const filteredLines = lines.filter((line, index) => !line.startsWith("Server:") && !line.startsWith("Date:") && !line.startsWith("Content-Type:") && !line.startsWith("Content-Length:") && !line.startsWith("Connection:"));
+            const filteredLines_role = lines_role.filter((line, index) => !line.startsWith("Server:") && !line.startsWith("Date:") && !line.startsWith("Content-Type:") && !line.startsWith("Content-Length:") && !line.startsWith("Connection:"));
+            const mergedLines = [...filteredLines, ...filteredLines_role];
+            // Format each line with appropriate HTML tags  
+            const formattedResponse = mergedLines.map(line => {
+              // Remove star marks
+              line = line.replace(/\*/g, '');
+              // Separate the title and content using the colon ':' character
+              const parts = line.split(':');
+              // Ensure there are two parts (title and content)
+              if (parts.length === 2) {
+                const title = parts[0].trim();
+                const content = parts[1].trim();
+                // Wrap title and content in paragraphs
+                return `<p><strong>${title}</strong>: ${content}</p>`;
+              } else {
+                // If the line does not contain a colon, wrap it in a paragraph
+                return `<p>${line.trim()}</p>`;
+              }
+            }).join('');
+
+            // Append the formatted response to the chat, including the first line after "Response:"
+            removeTypingIndicator();
+            appendMessage(BOT_NAME, BOT_IMG, "left", formattedResponse + "<br><br> <strong>Type menu to select other option");
+          },
+          error: function (xhr, status, error) {
+            removeTypingIndicator();
+            appendMessage(BOT_NAME, BOT_IMG, "left", "Sorry, Unable to fetch information please check type of file and try again." + "<br><br> <strong>Type menu to select other option");
+          }
+        });
+      }
+    }
+    function get(selector, root = document) {
+      return root.querySelector(selector);
+    }
+
+
+    function removeTypingIndicator() {
+      const typingIndicator = document.querySelector('.msg.left-msg:last-child');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+    }
+
+    function formatText(text) {
+      // Replace line breaks with <br> tags
+      return text.replace(/\n/g, "<br>");
+    }
+
+
+    function formatDataToList(text) {
+      // Replace line breaks with <br> tags
+      const formattedText = text.replace(/\n/g, "<br>");
+
+      // Check if the text contains commas
+      if (formattedText.includes(',')) {
+        // Split the text by commas and trim each item
+        const items = formattedText.split(',').map(item => item.trim());
+
+        // Generate HTML list
+        if (items.length - 1 >= 2) {
+          const listHTML = '<ul>' + items.map(item => `<li>${item}</li>`).join('') + '</ul>';
+
+          return listHTML;
+        }
+      } else {
+        // If the text does not contain commas, wrap it in a paragraph
+        return `<p>${formattedText}</p>`;
+      }
+    }
+    function formatDate(date) {
+      const h = "0" + date.getHours();
+      const m = "0" + date.getMinutes();
+
+      return `${h.slice(-2)}:${m.slice(-2)}`;
+    }
+
+
+  function toggleChat() {
+            var chatPopup = document.getElementById("msger-popup");
+            var chatIcon = document.getElementById("chat-icon");
+            if (chatPopup.style.display === "none" || chatPopup.style.display === "") {
+                chatPopup.style.display = "block";
+                chatIcon.style.display = "none"; // Hide chat icon when chat popup is displayed
+            } else {
+                chatPopup.style.display = "none";
+                chatIcon.style.display = "block"; // Show chat icon when chat popup is hidden
+            }
+        }
+
+        window.onload = function() {
+    setTimeout(function() {
+        var chatContent = document.getElementById('chat-content');
+        chatContent.style.animation = 'fade-in 1s ease';
+        chatContent.style.opacity = 1;
+        chatContent.style.visibility = 'visible';
+    }, 3000); // Adjust the delay (in milliseconds) as needed
+};
+  </script>
+
+</body>
+
+</html>
