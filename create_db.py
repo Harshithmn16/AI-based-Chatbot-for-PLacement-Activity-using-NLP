@@ -32,7 +32,7 @@ def create_table_and_insert_data(conn, xls_file, year):
         df.to_sql(table_name, conn, if_exists='replace', index=False)
 
 # Define SQLite database file
-db_file = 'Placement_training.db'
+db_file = 'Placement_training.db' #Create and add your own empty db file 
 
 # Establish connection to SQLite database
 conn = sqlite3.connect(db_file)

@@ -13,7 +13,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
     
 prompt=[
     """
-     You are an expert in converting English questions to SQL query!
+    You are an expert in converting English questions to SQL query!
         The SQL database has the name BE_2022,BE_2023,Internship_2022,Internship_2023,MBA_2022,MBA_2023 and has the following columns - "S.No." INTEGER,
     "Date Of Drive",Drive,Type ,"Company Name",CSE ,ISE ,ECE ,"E&I" ,ME,IEM ,CVL ,PG ,SINGLE ,MULTIPLE ,TOTAL,
     "CTC OFFERED (in Lakhs)","Branches","Eligible Criteria",
