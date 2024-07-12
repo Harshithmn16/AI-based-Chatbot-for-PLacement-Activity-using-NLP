@@ -13,7 +13,6 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
-    # return render_template('index.html')
 
 #URL for response for previous year placement data
 @app.route('/response_db',methods=['GET', 'POST'])

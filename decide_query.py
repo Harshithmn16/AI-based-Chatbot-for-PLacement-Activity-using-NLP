@@ -11,7 +11,7 @@ from IPython.display import display
 from IPython.display import Markdown
 import requests
 
-
+#Create a .env file in your workspace and get your Google API Key passed in to the file
 os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 

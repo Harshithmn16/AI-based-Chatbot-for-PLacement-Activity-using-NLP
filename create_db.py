@@ -39,7 +39,7 @@ conn = sqlite3.connect(db_file)
 cur = conn.cursor()
 
 # Process each Excel file for respective years
-for year, xls_file in zip([2022, 2023], ['2022 Batch -placement Tracker  -Till Date.xlsx', '2023 Batch -placement Tracker  -Till Date.xlsx']):
+for year, xls_file in zip([2022, 2023], ['2022 Batch -placement Tracker  -Till Date.xlsx', '2023 Batch -placement Tracker  -Till Date.xlsx']): #Add your own data in xlsx format
     create_table_and_insert_data(conn, xls_file, year)
 cur.execute('ALTER TABLE BE_2022 RENAME COLUMN "Elogible criteria" TO "Eligible Criteria";')
 cur.execute('ALTER TABLE BE_2023 RENAME COLUMN "Elogible criteria" TO "Eligible Criteria";')
